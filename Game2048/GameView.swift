@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct GameView: View {
-    @State var game = GameModel(boardSize: 4)
+    @State var game = GameModel()
     var body: some View {
         VStack {
-            ForEach(0..<game.grid.count, id: \.self) { row in
+            ForEach(0..<game.boardSize.height, id: \.self) { row in
                 HStack {
-                    ForEach(0..<game.grid[row].count, id: \.self) { col in
-                        let value = game.grid[row][col]
+                    ForEach(0..<game.boardSize.width, id: \.self) { col in
+                        let value = game.board[row][col]
                         Text("\(value)")
                             .font(.title)
                             .frame(width: 50, height: 50)
