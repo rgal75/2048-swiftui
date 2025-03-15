@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Game descriptions: https://rosettacode.org/wiki/2048
 @main
 struct Game2048App: App {
     var body: some Scene {
