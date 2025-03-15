@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "C31211A6-C483-4F0C-985C-40FF9C553D6F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Game2048.xcodeproj",
+      "identifier" : "23525CB42D84A825004DB8DA",
+      "name" : "Game2048"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Game2048.xcodeproj",
+        "identifier" : "23525CC52D84A826004DB8DA",
+        "name" : "Game2048Tests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Game2048.xcodeproj",
+        "identifier" : "23525CCF2D84A826004DB8DA",
+        "name" : "Game2048UITests"
+      }
+    }
+  ],
+  "version" : 1
+}

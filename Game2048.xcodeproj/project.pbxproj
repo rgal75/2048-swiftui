@@ -27,6 +27,7 @@
 		23525CB52D84A825004DB8DA /* Game2048.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game2048.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23525CC62D84A826004DB8DA /* Game2048Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Game2048Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23525CD02D84A826004DB8DA /* Game2048UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Game2048UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23B316F72D85FC0000EEABD4 /* Game2048.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Game2048.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		23525CAC2D84A825004DB8DA = {
 			isa = PBXGroup;
 			children = (
+				23B316F72D85FC0000EEABD4 /* Game2048.xctestplan */,
 				23525CB72D84A825004DB8DA /* Game2048 */,
 				23525CC92D84A826004DB8DA /* Game2048Tests */,
 				23525CD32D84A826004DB8DA /* Game2048UITests */,
