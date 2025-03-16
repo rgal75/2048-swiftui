@@ -170,7 +170,7 @@ struct GameModelTests {
     }
     
     // MARK: - End of Game
-    @Test("Given no movement is possible, when the user swipes, the board does not change")
+    @Test("Given no movement is possible, when the user swipes in any direction, the board does not change")
     func testGameOverNoMovementsPossibble() async throws {
         let sut = GameModel(initialBoard: [
             [2, 4, 2, 4, 2],
@@ -180,6 +180,9 @@ struct GameModelTests {
         ])
         // When
         sut.userDidSwipe(translation: CGSize(width: 3, height: 2))
+        sut.userDidSwipe(translation: CGSize(width: -3, height: 2))
+        sut.userDidSwipe(translation: CGSize(width: 2, height: 3))
+        sut.userDidSwipe(translation: CGSize(width: 2, height: -3))
         // Then
         #expect(sut.board == [
             [2, 4, 2, 4, 2],
@@ -187,6 +190,37 @@ struct GameModelTests {
             [2, 4, 2, 4, 2],
             [4, 2, 4, 2, 4]
         ])
+    }
+    
+    @Test("Given no movement is possible, when the user swipes in any direction, the game is over")
+    func testGameIsLost() async throws {
+        let sut = GameModel(initialBoard: [
+            [2, 4, 2, 4, 2],
+            [4, 2, 4, 2, 4],
+            [2, 4, 2, 4, 2],
+            [4, 2, 4, 2, 4]
+        ])
+        // When
+        sut.userDidSwipe(translation: CGSize(width: 3, height: 2))
+        sut.userDidSwipe(translation: CGSize(width: -3, height: 2))
+        sut.userDidSwipe(translation: CGSize(width: 2, height: 3))
+        sut.userDidSwipe(translation: CGSize(width: 2, height: -3))
+        // Then
+        #expect(sut.gameResult == .lost)
+    }
+    
+    @Test("When a tile value is 2048, the user wins the game")
+    func testGameIsWon() async throws {
+        let sut = GameModel(initialBoard: [
+            [2, 1024, 1024, 4, 2],
+            [4, 2, 4, 2, 4],
+            [2, 4, 2, 4, 2],
+            [4, 2, 4, 2, 4]
+        ])
+        // When
+        sut.userDidSwipe(translation: CGSize(width: -3, height: 2))
+        // Then
+        #expect(sut.gameResult == .won)
     }
     
     private func numberOf(_ tileNumber: Int, on board: [[Int]]) -> Int {

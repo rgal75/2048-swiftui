@@ -27,6 +27,8 @@ struct GameView: View {
                     }
                 }
             }
+            Text("\(gameResult)")
+                .font(.headline)
         }
         .padding()
         .background(Color.gray.opacity(0.2))
@@ -34,6 +36,17 @@ struct GameView: View {
         .gesture(DragGesture().onEnded({ gesture in
             game.userDidSwipe(translation: gesture.translation)
         }))
+    }
+    
+    private var gameResult: String {
+        switch game.gameResult {
+        case .won:
+            return "You won!"
+        case .lost:
+            return "Game over!"
+        case .ongoing:
+            return ""
+        }
     }
 }
 

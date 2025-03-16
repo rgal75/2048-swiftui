@@ -9,12 +9,24 @@ import Foundation
 typealias GameBoard = [[Int]]
 typealias BoardSize = (width: Int, height: Int)
 
+enum GameResult {
+    case won
+    case lost
+    case ongoing
+}
 @Observable
 final class GameModel {
     let boardSize: BoardSize
     var board: GameBoard
+    var gameResult: GameResult = .ongoing
     
-    init(boardSize: BoardSize = (width: 4, height: 4)) {
+    enum Constants {
+        static let winnerValue: Int = 2048
+        static let initialBoardSize: BoardSize = (width: 4, height: 4)
+    }
+    private var lastMove: (up: Bool, down: Bool, left: Bool, right: Bool) = (true, true, true, true)
+    
+    init(boardSize: BoardSize = Constants.initialBoardSize) {
         self.boardSize = boardSize
         self.board = makeBoard(size: boardSize)
     }
@@ -38,9 +50,16 @@ final class GameModel {
                 slideUp()
             }
         }
+        if numberOf(Constants.winnerValue, on: board) > 0 {
+            gameResult = .won
+        }
+        if !lastMove.up && !lastMove.down && !lastMove.left && !lastMove.right {
+            gameResult = .lost
+        }
     }
     
     private func slideUp() {
+        var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
             for colIdx in 0..<boardSize.width {
@@ -50,18 +69,22 @@ final class GameModel {
                 while currentRowIdx > 0, board[currentRowIdx - 1][colIdx] == 0 {
                     board[currentRowIdx][colIdx] = 0
                     board[currentRowIdx - 1][colIdx] = value
+                    boardHasChanged = true
                     currentRowIdx -= 1
                 }
                 if currentRowIdx > 0 && board[currentRowIdx - 1][colIdx] == value {
                     board[currentRowIdx - 1][colIdx] += value
+                    boardHasChanged = true
                     board[currentRowIdx][colIdx] = 0
                 }
             }
         }
+        lastMove.up = boardHasChanged
         addRandomTile()
     }
     
     private func slideDown() {
+        var boardHasChanged = false
         for rowIdx in (0..<boardSize.height).reversed() {
             let row = board[rowIdx]
             for colIdx in 0..<boardSize.width {
@@ -71,18 +94,22 @@ final class GameModel {
                 while currentRowIdx < boardSize.height - 1, board[currentRowIdx + 1][colIdx] == 0 {
                     board[currentRowIdx][colIdx] = 0
                     board[currentRowIdx + 1][colIdx] = value
+                    boardHasChanged = true
                     currentRowIdx += 1
                 }
                 if currentRowIdx < boardSize.height - 1 && board[currentRowIdx + 1][colIdx] == value {
                     board[currentRowIdx + 1][colIdx] += value
+                    boardHasChanged = true
                     board[currentRowIdx][colIdx] = 0
                 }
             }
         }
+        lastMove.down = boardHasChanged
         addRandomTile()
     }
     
     private func slideLeft() {
+        var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
             for colIdx in 0..<boardSize.width {
@@ -92,18 +119,22 @@ final class GameModel {
                 while currentColIdx > 0, board[rowIdx][currentColIdx - 1] == 0 {
                     board[rowIdx][currentColIdx] = 0
                     board[rowIdx][currentColIdx - 1] = value
+                    boardHasChanged = true
                     currentColIdx -= 1
                 }
                 if currentColIdx > 0 && board[rowIdx][currentColIdx - 1] == value {
                     board[rowIdx][currentColIdx - 1] += value
+                    boardHasChanged = true
                     board[rowIdx][currentColIdx] = 0
                 }
             }
         }
+        lastMove.left = boardHasChanged
         addRandomTile()
     }
     
     private func slideRight() {
+        var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
             for colIdx in (0..<boardSize.width).reversed() {
@@ -113,14 +144,17 @@ final class GameModel {
                 while currentColIdx < boardSize.width - 1, board[rowIdx][currentColIdx + 1] == 0 {
                     board[rowIdx][currentColIdx] = 0
                     board[rowIdx][currentColIdx + 1] = value
+                    boardHasChanged = true
                     currentColIdx += 1
                 }
                 if currentColIdx < boardSize.width - 1 && board[rowIdx][currentColIdx + 1] == value {
                     board[rowIdx][currentColIdx + 1] += value
+                    boardHasChanged = true
                     board[rowIdx][currentColIdx] = 0
                 }
             }
         }
+        lastMove.right = boardHasChanged
         addRandomTile()
     }
     
@@ -144,6 +178,18 @@ final class GameModel {
         }
         
         return emptyTiles
+    }
+    
+    private func numberOf(_ tileNumber: Int, on board: [[Int]]) -> Int {
+        var tileNumberCount = 0
+        
+        board.flatMap(\.self).forEach { tileCaption in
+            if tileCaption == tileNumber {
+                tileNumberCount += 1
+            }
+        }
+        
+        return tileNumberCount
     }
 }
 
