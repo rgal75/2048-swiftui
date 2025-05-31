@@ -21,7 +21,7 @@ final class GameModel {
     var gameResult: GameResult = .ongoing
     
     // Stores the positions of tiles that merged in the last move
-    var mergedTiles: [(Int, Int)] = []
+    private var mergedTiles: [(Int, Int)] = []
     
     enum Constants {
         static let winnerValue: Int = 2048
@@ -201,6 +201,10 @@ final class GameModel {
         }
         
         return tileNumberCount
+    }
+    
+    func tileWasMergedInLastMoveAt(row: Int, col: Int) -> Bool {
+        mergedTiles.contains { (pos: (Int, Int)) -> Bool in pos.0 == row && pos.1 == col }
     }
 }
 
