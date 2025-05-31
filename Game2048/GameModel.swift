@@ -20,6 +20,9 @@ final class GameModel {
     var board: GameBoard
     var gameResult: GameResult = .ongoing
     
+    // Stores the positions of tiles that merged in the last move
+    var mergedTiles: [(Int, Int)] = []
+    
     enum Constants {
         static let winnerValue: Int = 2048
         static let initialBoardSize: BoardSize = (width: 4, height: 4)
@@ -59,6 +62,7 @@ final class GameModel {
     }
     
     private func slideUp() {
+        mergedTiles.removeAll()
         var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
@@ -76,6 +80,7 @@ final class GameModel {
                     board[currentRowIdx - 1][colIdx] += value
                     boardHasChanged = true
                     board[currentRowIdx][colIdx] = 0
+                    mergedTiles.append((currentRowIdx - 1, colIdx))
                 }
             }
         }
@@ -84,6 +89,7 @@ final class GameModel {
     }
     
     private func slideDown() {
+        mergedTiles.removeAll()
         var boardHasChanged = false
         for rowIdx in (0..<boardSize.height).reversed() {
             let row = board[rowIdx]
@@ -101,6 +107,7 @@ final class GameModel {
                     board[currentRowIdx + 1][colIdx] += value
                     boardHasChanged = true
                     board[currentRowIdx][colIdx] = 0
+                    mergedTiles.append((currentRowIdx + 1, colIdx))
                 }
             }
         }
@@ -109,6 +116,7 @@ final class GameModel {
     }
     
     private func slideLeft() {
+        mergedTiles.removeAll()
         var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
@@ -126,6 +134,7 @@ final class GameModel {
                     board[rowIdx][currentColIdx - 1] += value
                     boardHasChanged = true
                     board[rowIdx][currentColIdx] = 0
+                    mergedTiles.append((rowIdx, currentColIdx - 1))
                 }
             }
         }
@@ -134,6 +143,7 @@ final class GameModel {
     }
     
     private func slideRight() {
+        mergedTiles.removeAll()
         var boardHasChanged = false
         for rowIdx in 0..<boardSize.height {
             let row = board[rowIdx]
@@ -151,6 +161,7 @@ final class GameModel {
                     board[rowIdx][currentColIdx + 1] += value
                     boardHasChanged = true
                     board[rowIdx][currentColIdx] = 0
+                    mergedTiles.append((rowIdx, currentColIdx + 1))
                 }
             }
         }
